@@ -28,7 +28,7 @@ public class AppConfig {
 			.and()
 			.authorizeHttpRequests(auth-> auth.requestMatchers("/api/**").authenticated()
 					.anyRequest().permitAll())
-			.addFilterBefore(null, BasicAuthenticationFilter.class)
+			.addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
 			.csrf().disable()
 			.cors().configurationSource(CorsConfigurationSource()).and()
 			.httpBasic().and().formLogin();
