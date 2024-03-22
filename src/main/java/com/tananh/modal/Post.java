@@ -10,12 +10,14 @@ import com.tananh.dto.UserDto;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -43,6 +45,9 @@ public class Post {
 	@OneToMany
 	private List<Comments> comments = new ArrayList<>();
 	
+	@Embedded
+	@ElementCollection
+	@JoinTable(name = "likeByUser", joinColumns = @JoinColumn(name = "user_id"))
 	private Set<UserDto> likeByUser = new HashSet<UserDto>();
 
 	public Post() {

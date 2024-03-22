@@ -19,7 +19,7 @@ import jakarta.persistence.*;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    private Integer id;
     private String userName;
     private String name;
     private String email;
@@ -36,12 +36,37 @@ public class User {
     
     private List<Post> savedPost= new ArrayList<>();
 
+    
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public User(Integer id, String userName, String name, String email, String imageURL, String moblie, String userBio,
+			String passWord, String gender, Set<UserDto> follower, Set<UserDto> following, List<Story> stories,
+			List<Post> savedPost) {
+		super();
+		this.id = id;
+		this.userName = userName;
+		this.name = name;
+		this.email = email;
+		this.imageURL = imageURL;
+		this.moblie = moblie;
+		this.userBio = userBio;
+		this.passWord = passWord;
+		this.gender = gender;
+		this.follower = follower;
+		this.following = following;
+		this.stories = stories;
+		this.savedPost = savedPost;
+	}
+
 	public Integer getUserId() {
-		return userId;
+		return id;
 	}
 
 	public void setUserId(Integer userId) {
-		this.userId = userId;
+		this.id = userId;
 	}
 
 	public String getUserName() {
