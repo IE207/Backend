@@ -15,13 +15,13 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String userName;
+    private String username;
     private String name;
     private String email;
     private String imageURL;
     private String moblie;
-    private String userBio;
-    private String passWord;
+    private String userbio;
+    private String password;
     private String gender;
     
     @Embedded
@@ -49,13 +49,13 @@ public class User {
 			List<Post> savedPost) {
 		super();
 		this.id = id;
-		this.userName = userName;
+		this.username = userName;
 		this.name = name;
 		this.email = email;
 		this.imageURL = imageURL;
 		this.moblie = moblie;
-		this.userBio = userBio;
-		this.passWord = passWord;
+		this.userbio = userBio;
+		this.password = passWord;
 		this.gender = gender;
 		this.follower = follower;
 		this.following = following;
@@ -72,11 +72,11 @@ public class User {
 	}
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.username = userName;
 	}
 
 	public String getName() {
@@ -112,19 +112,19 @@ public class User {
 	}
 
 	public String getUserBio() {
-		return userBio;
+		return userbio;
 	}
 
 	public void setUserBio(String userBio) {
-		this.userBio = userBio;
+		this.userbio = userBio;
 	}
 
 	public String getPassWord() {
-		return passWord;
+		return password;
 	}
 
 	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+		this.password = passWord;
 	}
 
 	public String getGender() {
