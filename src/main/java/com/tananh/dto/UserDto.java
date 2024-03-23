@@ -1,7 +1,7 @@
 package com.tananh.dto;
 
 public class UserDto {
-	private Integer userId;
+	private Integer id;
     private String userName;
     private String name;
     private String email;
@@ -13,17 +13,17 @@ public class UserDto {
 	}
 	public UserDto(Integer userId, String userName, String name, String email, String imageURL) {
 		super();
-		this.userId = userId;
+		this.id = userId;
 		this.userName = userName;
 		this.name = name;
 		this.email = email;
 		this.imageURL = imageURL;
 	}
 	public Integer getUserId() {
-		return userId;
+		return id;
 	}
 	public void setUserId(Integer userId) {
-		this.userId = userId;
+		this.id = userId;
 	}
 	public String getUserName() {
 		return userName;

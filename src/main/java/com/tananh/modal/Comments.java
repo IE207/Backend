@@ -9,13 +9,19 @@ import com.tananh.dto.UserDto;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="comments")
 public class Comments {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	@Embedded
@@ -27,6 +33,8 @@ public class Comments {
 	
 	private String content;
 	
+	@Embedded
+	@ElementCollection
 	private Set<UserDto> likeByUser =new HashSet<UserDto>();
 	
 	private LocalDateTime createAt;

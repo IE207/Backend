@@ -7,18 +7,13 @@ import java.util.Set;
 
 import com.tananh.dto.UserDto;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="users")
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String userName;
     private String name;
@@ -28,12 +23,19 @@ public class User {
     private String userBio;
     private String passWord;
     private String gender;
+    
+    @Embedded
+	@ElementCollection
     private Set<UserDto> follower = new HashSet<UserDto>();
     
+    @Embedded
+	@ElementCollection
     private Set<UserDto> following = new HashSet<UserDto>();
     
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Story> stories= new ArrayList<>();
     
+    @ManyToMany
     private List<Post> savedPost= new ArrayList<>();
 
     

@@ -39,6 +39,7 @@ public class Post {
 	
 	@NotNull
 	private String image;
+	
 	private String caption;
 	private LocalDateTime CreateAt;
 	
@@ -47,8 +48,8 @@ public class Post {
 	
 	@Embedded
 	@ElementCollection
-	@JoinTable(name = "likeByUser", joinColumns = @JoinColumn(name = "user_id"))
-	private Set<UserDto> likeByUser = new HashSet<UserDto>();
+	@JoinTable(name = "likeByUsers", joinColumns = @JoinColumn(name = "user_id"))
+	private Set<UserDto> likeByUsers = new HashSet<UserDto>();
 
 	public Post() {
 		super();
@@ -64,7 +65,7 @@ public class Post {
 		this.caption = caption;
 		CreateAt = createAt;
 		this.comments = comments;
-		this.likeByUser = likeByUser;
+		this.likeByUsers = likeByUser;
 	}
 
 	public Integer getId() {
@@ -116,11 +117,11 @@ public class Post {
 	}
 
 	public Set<UserDto> getLikeByUser() {
-		return likeByUser;
+		return likeByUsers;
 	}
 
 	public void setLikeByUser(Set<UserDto> likeByUser) {
-		this.likeByUser = likeByUser;
+		this.likeByUsers = likeByUser;
 	}
 	
 	
