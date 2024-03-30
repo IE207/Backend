@@ -7,6 +7,7 @@ import com.tananh.modal.User;
 
 public interface userService {
 	public User findUserById(Integer id)throws UserException;
+	public User findUserByUsername(String name)throws UserException;
 	public User findUserByJWT(String jwt)throws UserException ;
 	public List<User> findUserByIds( List<Integer> UserIds ) throws UserException;
 	public String Follower(Integer reqUserId, Integer followerUserId)throws UserException;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tananh.config.JwtProvider;
 import com.tananh.dto.UserDto;
@@ -11,6 +12,7 @@ import com.tananh.exception.UserException;
 import com.tananh.modal.User;
 import com.tananh.responsitory.UserResponsitory;
 
+@Service
 public class UserServiceImplement implements userService {
 
 	@Autowired UserResponsitory userResponsitory;
@@ -146,6 +148,15 @@ public class UserServiceImplement implements userService {
 
 	   
 	    return userResponsitory.save(existingUser);
+	}
+
+	@Override
+	public User findUserByUsername(String name) throws UserException {
+		Optional<User> user = userResponsitory.findByUserName(name);
+		if(user.isPresent())
+		{
+			return user.get();
+		}throw new UserException("Không tìm  thấy người dùng với tên: "+name);
 	}
 
 }
