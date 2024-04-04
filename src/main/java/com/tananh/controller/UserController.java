@@ -62,8 +62,9 @@ public class UserController {
 		return new ResponseEntity<List<User>>(users,HttpStatus.OK);
 	}
 	
-	@PutMapping("/{userId}")
+	@PutMapping("update/{userId}")
     public ResponseEntity<User> updateUserDetails(@PathVariable Integer userId, @RequestBody User updatedUser) throws UserException {
-		return null;
+		User user = userService.updateUserDetails(updatedUser, userId);
+		return ResponseEntity.ok().body(user); 
     }
 }

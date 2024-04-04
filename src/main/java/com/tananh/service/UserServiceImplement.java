@@ -127,27 +127,30 @@ public class UserServiceImplement implements userService {
 	}
 
 	@Override
-	public User updateUserDetails(User updatedUser, User existingUser) throws UserException {
+	public User updateUserDetails(User updatedUser, Integer userId) throws UserException {
 		 
 	    if (updatedUser == null) {
 	        throw new UserException("Thông tin người dùng cập nhật không được null");
 	    }
 
-	    
-	    if (existingUser == null) {
-	        throw new UserException("Người dùng cần cập nhật không tồn tại");
-	    }
+	    Optional<User> user= userResponsitory.findById(userId);
+		if(user.isPresent())
+		{
+				user.get().setName(updatedUser.getName());
+				user.get().setEmail(updatedUser.getEmail());
+				user.get().setImageURL(updatedUser.getImageURL());
+				user.get().setMoblie(updatedUser.getMoblie());
+				user.get().setUserbio(updatedUser.getUserbio());
+				user.get().setGender(updatedUser.getGender());
+				return userResponsitory.save(user.get());
+		} throw new UserException("Không tìm  thấy người dùng với id:"+userId);
+	
 
 	  
-	    existingUser.setName(updatedUser.getName());
-	    existingUser.setEmail(updatedUser.getEmail());
-	    existingUser.setImageURL(updatedUser.getImageURL());
-	    existingUser.setMoblie(updatedUser.getMoblie());
-	    existingUser.setUserbio(updatedUser.getUserbio());
-	    existingUser.setGender(updatedUser.getGender());
+	   
 
 	   
-	    return userResponsitory.save(existingUser);
+	    
 	}
 
 	@Override
