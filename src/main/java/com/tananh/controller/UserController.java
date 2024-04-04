@@ -47,10 +47,11 @@ public class UserController {
 		return null;
 	}
 	
-//	@PutMapping("/req")
-//	public ResponseEntity<T> findUserProfileHandle(@RequestHeader("Authorization") String jwt){
-//		return null;
-//	}
+	@GetMapping("/profile")
+	public ResponseEntity<User> findUserProfileHandle(@RequestHeader("Authorization") String jwt) throws UserException{
+		User user = userService.findUserByJWT(jwt);
+		return new ResponseEntity<User>(user,HttpStatus.OK);
+	}
 	
 	@GetMapping("/search")
 	public ResponseEntity<List<User>> searchUserHandle(@RequestParam("query") String query) throws UserException{
