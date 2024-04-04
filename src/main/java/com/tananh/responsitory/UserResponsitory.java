@@ -19,7 +19,7 @@ public interface UserResponsitory extends JpaRepository<User, Integer>{
 	
 	 public User findByEmail(String email);
 	    
-	@Query("SELECT DISTINCT u FROM User u WHERE u.userName LIKE %:query% OR u.email LIKE %:query%")
+	@Query("SELECT u FROM User u WHERE u.userName LIKE %:query%")
 	public List<User> searchUser(@Param("query") String query);
 	    
 	@Query("SELECT u FROM User u WHERE u.id IN :users")

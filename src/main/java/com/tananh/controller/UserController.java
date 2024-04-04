@@ -54,6 +54,9 @@ public class UserController {
 	
 	@GetMapping("/search")
 	public ResponseEntity<List<User>> searchUserHandle(@RequestParam("query") String query) throws UserException{
+		if(query.equals("")) {
+			throw new UserException("query null");
+		}
 		List<User> users= userService.searchUser(query);
 		return new ResponseEntity<List<User>>(users,HttpStatus.OK);
 	}
