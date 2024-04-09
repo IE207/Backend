@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tananh.dto.UserDto;
 import com.tananh.exception.PostException;
@@ -13,6 +14,7 @@ import com.tananh.modal.User;
 import com.tananh.responsitory.PostResponsitory;
 import com.tananh.responsitory.UserResponsitory;
 
+@Service
 public class PostServiceImplement implements PostService{
 
 	@Autowired userService userService;
@@ -40,7 +42,7 @@ public class PostServiceImplement implements PostService{
 				throw new PostException("Thông tin cập nhật không có!");
 			}
 			Post post = findPostById(postUpdate.getId());
-			if(postUpdate.getUser().getUserId().equals(userId)) 
+			if(post.getUser().getUserId().equals(userId)) 
 			{
 				post.setCaption(postUpdate.getCaption());
 				post.setCreateAt(postUpdate.getCreateAt());
