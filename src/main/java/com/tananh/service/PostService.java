@@ -9,9 +9,9 @@ import com.tananh.modal.Post;
 public interface PostService {
 	public Post createPost(Post post, Integer userId) throws UserException;
 	
-	public Post updatePost(Post postUpdate, Integer postId) throws PostException;
+	public Post updatePost(Post postUpdate, Integer userId) throws PostException;
 	
-	public String deletePost(Integer postId) throws PostException;
+	public String deletePost(Integer postId, Integer userId) throws PostException, UserException;
 	
 	public List<Post> findPostByUserId(Integer userId) throws PostException,UserException;
 	
@@ -19,12 +19,14 @@ public interface PostService {
 	
 	public Post findPostById(Integer postId) throws PostException;
 	
-	public String savePost (Integer userId, Integer postId) throws PostException;
+	public String savePost (Integer userId, Integer postId) throws PostException, UserException;
 	
-	public String unSavePost (Integer userId, Integer postId) throws PostException;
+	public String unSavePost (Integer userId, Integer postId) throws PostException, UserException ;
 	
-	public String likePost (Integer userId, Integer postId) throws PostException;
+	public Post likePost (Integer userId, Integer postId) throws PostException, UserException;
 	
-	public String unLikePost (Integer userId, Integer postId) throws PostException;
+	public Post unLikePost (Integer userId, Integer postId) throws PostException, UserException;
+	
+	public List<Post> searchPosts (String query) throws PostException;
 }
 	
