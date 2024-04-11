@@ -139,7 +139,7 @@ public class PostServiceImplement implements PostService{
 		userDto.setUserName(user.getUserName());
 		Post post = findPostById(postId);
 	
-		post.getLikeByUser().remove(userDto);
+		 post.getLikeByUser().removeIf(u -> u.getUserId().equals(userId));
 		
 		postResponsitory.save(post);
 		return postResponsitory.save(post);

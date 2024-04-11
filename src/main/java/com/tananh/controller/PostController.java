@@ -68,11 +68,11 @@ public class PostController {
 		return new ResponseEntity<String>(deletedSuccess,HttpStatus.OK);
 	}
 	
-	@GetMapping("/all/{id}")
-	public ResponseEntity<List<Post>> findPostByUserIdHandler(@PathVariable("id") Integer userId) throws PostException,UserException{
-		List<Post> posts = postService.findPostByUserId(userId);
-		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
-	}
+//	@GetMapping("/all/{id}")
+//	public ResponseEntity<List<Post>> findPostByUserIdHandler(@PathVariable("id") Integer userId) throws PostException,UserException{
+//		List<Post> posts = postService.findPostByUserId(userId);
+//		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
+//	}
 	
 	@GetMapping("/following/{ids}")
 	public ResponseEntity<List<Post>> findAllPostByUserIdHandler(@PathVariable("ids") List<Integer> userId) throws PostException,UserException{
