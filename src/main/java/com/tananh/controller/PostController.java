@@ -51,7 +51,7 @@ public class PostController {
 			return new ResponseEntity<Post>(postUpdated,HttpStatus.OK);
 		}
 	
-	@GetMapping("all/{id}")
+	@GetMapping("/all/{id}")
 	public ResponseEntity<List<Post>> findAllPostHandler(@PathVariable("id") Integer userId) throws PostException,UserException{
 		
 		List<Post> posts = postService.findPostByUserId(userId);
@@ -59,12 +59,67 @@ public class PostController {
 		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deletePostHandler(@PathVariable("id") Integer postId, @RequestHeader("Authorization") String jwt) throws PostException,UserException{
 		User user = userService.findUserByJWT(jwt);
 		Integer userId= user.getId();
 		String deletedSuccess = postService.deletePost(postId, userId);
 		
 		return new ResponseEntity<String>(deletedSuccess,HttpStatus.OK);
+	}
+	
+	@GetMapping("/all/{id}")
+	public ResponseEntity<List<Post>> findPostByUserIdHandler(@PathVariable("id") Integer userId) throws PostException,UserException{
+		List<Post> posts = postService.findPostByUserId(userId);
+		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
+	}
+	
+	@GetMapping("/following/{ids}")
+	public ResponseEntity<List<Post>> findAllPostByUserIdHandler(@PathVariable("ids") List<Integer> userId) throws PostException,UserException{
+		List<Post> posts = postService.findAllPostByUserId(userId);
+		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
+	}
+	
+	@GetMapping("/{postId}")
+	public ResponseEntity<Post> findPostByIdHandler(@PathVariable Integer postId) throws PostException,UserException{
+		Post posts = postService.findPostById(postId);
+		return new ResponseEntity<Post>(posts,HttpStatus.OK);
+	}
+	
+	@PutMapping("/like/{postId}")
+	public ResponseEntity<Post> likePostHandler(@PathVariable Integer postId, @RequestHeader("Authorization") String jwt) throws PostException,UserException{
+		
+		User user = userService.findUserByJWT(jwt);
+		Integer userId= user.getId();
+		Post post = postService.likePost(userId, postId);
+		
+		return new ResponseEntity<Post>(post,HttpStatus.OK);
+	}
+	
+	@PutMapping("/unlike/{postId}")
+	public ResponseEntity<Post> unlikePostHandler(@PathVariable Integer postId, @RequestHeader("Authorization") String jwt) throws PostException,UserException{
+		
+		User user = userService.findUserByJWT(jwt);
+		Integer userId= user.getId();
+		Post post = postService.unLikePost(userId, postId);
+		
+		return new ResponseEntity<Post>(post,HttpStatus.OK);
+	}
+	
+	@PutMapping("/save/{postId}")
+	public ResponseEntity<String> savePostHandler(@PathVariable Integer postId, @RequestHeader("Authorization") String jwt) throws PostException,UserException{
+		User user = userService.findUserByJWT(jwt);
+		Integer userId= user.getId();
+		String savedSuccess = postService.savePost(userId, postId);
+		
+		return new ResponseEntity<String>(savedSuccess,HttpStatus.ACCEPTED);
+	}
+	@PutMapping("/unsave/{postId}")
+	public ResponseEntity<String> unsavePostHandler(@PathVariable Integer postId, @RequestHeader("Authorization") String jwt) throws PostException,UserException{
+		User user = userService.findUserByJWT(jwt);
+		Integer userId= user.getId();
+		String savedSuccess = postService.unSavePost(userId, postId);
+		
+		return new ResponseEntity<String>(savedSuccess,HttpStatus.ACCEPTED);
 	}
 }
