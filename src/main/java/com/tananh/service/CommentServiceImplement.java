@@ -15,6 +15,7 @@ import com.tananh.modal.Comments;
 import com.tananh.modal.Post;
 import com.tananh.modal.User;
 import com.tananh.responsitory.CommentResponsitory;
+import com.tananh.responsitory.PostResponsitory;
 
 
 @Service
@@ -23,27 +24,34 @@ public class CommentServiceImplement implements CommentService{
 	@Autowired userService userService;
 	@Autowired CommentResponsitory commentResponsitory;
 	@Autowired PostService postService;
+	@Autowired PostResponsitory postResponsitory;
 	
 	@Override
 	public Comments createComments(Comments comments, Integer userID, Integer postId) throws CommentException, UserException, PostException {
-		User user = userService.findUserById(userID);
-		
-		UserDto userDto = new UserDto();
-		userDto.setUserId(user.getId());
-		userDto.setEmail(user.getEmail());
-		userDto.setName(user.getName());
-		userDto.setUserName(user.getUserName());
-		userDto.setImageURL(user.getImageURL());
-		
-		comments.setUserDto(userDto);
-		comments.setCreateAt(LocalDateTime.now());
-		
-		Post post=postService.findPostById(postId);
-		post.getComments().add(comments);
-		
-		Comments commentSave= commentResponsitory.save(comments);
-		return commentSave;
+	    User user = userService.findUserById(userID);
+	    
+	    UserDto userDto = new UserDto();
+	    userDto.setUserId(user.getId());
+	    userDto.setEmail(user.getEmail());
+	    userDto.setName(user.getName());
+	    userDto.setUserName(user.getUserName());
+	    userDto.setImageURL(user.getImageURL());
+	    
+	    comments.setUserDto(userDto);
+	    comments.setCreateAt(LocalDateTime.now());
+	    
+	    Post post = postService.findPostById(postId);
+	    post.getComments().add(comments);
+	    
+	    // Set the post reference in the comment entity
+	    comments.setPost(post);
+	    
+	    Comments commentSave = commentResponsitory.save(comments);
+	    postResponsitory.save(post);
+	    
+	    return commentSave;
 	}
+
 
 	@Override
 	public String deleteComment(Integer commentId, Integer userId) throws CommentException, UserException {

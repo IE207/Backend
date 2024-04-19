@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tananh.dto.UserDto;
 
 import jakarta.persistence.AttributeOverride;
@@ -41,6 +42,7 @@ public class Comments {
 	
 	private LocalDateTime createAt;
 
+	 @JsonIgnore	
 	 @ManyToOne
 	 @JoinColumn(name = "post_id")
 	 private Post post;
@@ -50,14 +52,34 @@ public class Comments {
 	}
 
 
-	public Comments(Integer id, UserDto userDto, String content, Set<UserDto> likeByUser, LocalDateTime createAt) {
+
+
+	public Comments(Integer id, UserDto userDto, String content, Set<UserDto> likeByUser, LocalDateTime createAt,
+			Post post) {
 		super();
 		this.id = id;
 		this.userDto = userDto;
 		this.content = content;
 		this.likeByUser = likeByUser;
 		this.createAt = createAt;
+		this.post = post;
 	}
+
+
+
+
+	public Post getPost() {
+		return post;
+	}
+
+
+
+
+	public void setPost(Post post) {
+		this.post = post;
+	}
+
+
 
 
 	public Integer getId() {
