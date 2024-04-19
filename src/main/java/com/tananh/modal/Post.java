@@ -43,7 +43,7 @@ public class Post {
 	private String caption;
 	private LocalDateTime CreateAt;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "post")
 	private List<Comments> comments = new ArrayList<>();
 	
 	@Embedded
