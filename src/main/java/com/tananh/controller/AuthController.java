@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +66,7 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		String token = jwtProvider.genarateToken(authentication);
-		 
+		System.out.println("JWT token: " + token);
 		 AuthResponse authRes= new AuthResponse(token,true);
 		 
 		return new ResponseEntity<AuthResponse>(authRes,HttpStatus.CREATED);
@@ -83,4 +84,6 @@ public class AuthController {
 		return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 		
 	}
+
+	
 }

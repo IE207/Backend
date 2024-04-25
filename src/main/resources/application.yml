@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: SocialMedia
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/SocialMedia
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: Iv1.9a4cab0f5650066b
+            clientSecret: 23948f02933c34d0fc30eff2ddecd9c3fcb35be6
+          google:
+            clientId: 83578137948-a6fp2vasu9l7db3vn5k2b2khs64dfk0i.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+server:
+  port: 5454
+springdoc:
+  api-docs:
+    path: /api-docs
