@@ -20,9 +20,6 @@ spring:
           google:
             clientId: 83578137948-a6fp2vasu9l7db3vn5k2b2khs64dfk0i.apps.googleusercontent.com
             clientSecret: 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
-            scope:
-              - email
-              - profile
 server:
   port: 5454
 springdoc:

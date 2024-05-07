@@ -30,6 +30,7 @@ public class UserServiceImplement implements userService {
 	@Override
 	public User findUserByJWT(String jwt) throws UserException {
 		String email = jwtProvider.getEmailFromToken(jwt);
+		System.out.println("====================="+email);
 		User user = userResponsitory.findByEmail(email);
 		if(user!=null)
 		{
@@ -160,6 +161,12 @@ public class UserServiceImplement implements userService {
 		{
 			return user.get();
 		}throw new UserException("Không tìm  thấy người dùng với tên: "+name);
+	}
+
+	@Override
+	public User findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return userResponsitory.findByEmail(email);
 	}
 
 }

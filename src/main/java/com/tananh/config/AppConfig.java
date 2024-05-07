@@ -3,6 +3,7 @@ package com.tananh.config;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @EnableWebSecurity
 public class AppConfig {
 
+	@Autowired OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler; 
 	@Bean
 	public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
 		http.
@@ -31,7 +33,10 @@ public class AppConfig {
 			.addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
 			.csrf().disable()
 			.cors().configurationSource(CorsConfigurationSource()).and()
-			.oauth2Login().and()
+			.oauth2Login(oath2 -> {
+                oath2.successHandler(oAuth2LoginSuccessHandler);
+            }
+					)
 			.httpBasic().and().formLogin();
 		
 		return http.build();
@@ -45,7 +50,7 @@ public class AppConfig {
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				CorsConfiguration cfg = new CorsConfiguration();
 				cfg.setAllowedOrigins(Arrays.asList("http://localhost:4200",
-						"http://localhost:3000"
+						"http://localhost:3000","http://localhost:5454"
 						));
 				cfg.setAllowedMethods(Collections.singletonList("*"));
 				cfg.setAllowCredentials(true);

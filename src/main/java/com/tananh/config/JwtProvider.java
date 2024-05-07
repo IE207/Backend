@@ -7,6 +7,8 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.tananh.modal.User;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -21,6 +23,16 @@ public class JwtProvider {
 						.setIssuedAt(new Date())
 						.setExpiration(new Date(new Date().getTime()+86400000))
 						.claim("email",authenticaiton.getName())
+						.signWith(secretKey)
+						.compact();
+		return token;
+						
+	}
+	public String genarateTokenFromUser(User user) {
+		String token = Jwts.builder()
+						.setIssuedAt(new Date())
+						.setExpiration(new Date(new Date().getTime()+86400000))
+						.claim("email",user.getEmail())
 						.signWith(secretKey)
 						.compact();
 		return token;
