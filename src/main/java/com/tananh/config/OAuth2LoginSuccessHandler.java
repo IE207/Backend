@@ -60,8 +60,9 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
             
             SecurityContextHolder.getContext().setAuthentication(securityAuth);
             String token = jwtProvider.genarateToken(securityAuth);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write("{\"token\": \"" + token + "\"}");
 
-            sendTokenResponse(response, token);
         }
 
         this.setAlwaysUseDefaultTargetUrl(true);
@@ -69,11 +70,5 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         super.onAuthenticationSuccess(request, response, authentication);
     }
 
-    private void sendTokenResponse(HttpServletResponse response, String token) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String tokenJson = objectMapper.writeValueAsString(Collections.singletonMap("token", token));
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(tokenJson);
-    }
 }

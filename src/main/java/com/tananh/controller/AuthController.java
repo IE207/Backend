@@ -90,19 +90,5 @@ public class AuthController {
 		
 	}
 
-    
-//	@GetMapping("")
-//	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-//	    Map<String, Object> userAttributes = principal.getAttributes();
-//	    System.out.println("Thông tin người dùng:");
-//	    userAttributes.forEach((key, value) -> System.out.println(key + ": " + value));
-//	    return userAttributes;
-//	}
 
-
-//    @GetMapping("")
-//	 public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-//    		System.out.printf("name", principal.getAttributes());
-//	        return Collections.singletonMap("name", principal.getAttributes());
-//	    }
 }
