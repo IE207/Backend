@@ -62,9 +62,10 @@ public class UserController {
 		return new ResponseEntity<List<User>>(users,HttpStatus.OK);
 	}
 	
-	@PutMapping("update/{userId}")
-    public ResponseEntity<User> updateUserDetails(@PathVariable Integer userId, @RequestBody User updatedUser) throws UserException {
-		User user = userService.updateUserDetails(updatedUser, userId);
+	@PutMapping("/update")
+    public ResponseEntity<User> updateUserDetails( @RequestBody User updatedUser,@RequestHeader("Authorization") String jwt) throws UserException {
+		User userFromJwt = userService.findUserByJWT(jwt);
+		User user = userService.updateUserDetails(updatedUser, userFromJwt.getId());
 		return ResponseEntity.ok().body(user); 
     }
 }

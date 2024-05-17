@@ -3,6 +3,7 @@ package com.tananh.modal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.tananh.dto.UserDto;
@@ -191,6 +192,32 @@ public class User {
 
 	public void setSavedPost(List<Post> savedPost) {
 		this.savedPost = savedPost;
+	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, follower, following, gender, id, imageURL, moblie, name, password, savedPost,
+				stories, userName, userbio);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(email, other.email) && Objects.equals(follower, other.follower)
+				&& Objects.equals(following, other.following) && Objects.equals(gender, other.gender)
+				&& Objects.equals(id, other.id) && Objects.equals(imageURL, other.imageURL)
+				&& Objects.equals(moblie, other.moblie) && Objects.equals(name, other.name)
+				&& Objects.equals(password, other.password) && Objects.equals(savedPost, other.savedPost)
+				&& Objects.equals(stories, other.stories) && Objects.equals(userName, other.userName)
+				&& Objects.equals(userbio, other.userbio);
 	}
 	
 	

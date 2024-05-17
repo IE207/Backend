@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	 @Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		 registry.addEndpoint("/ws")
+		 registry.addEndpoint("/ws").setAllowedOrigins("*")
          .withSockJS();
 	}
 
@@ -36,7 +36,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	    public void configureMessageBroker(MessageBrokerRegistry registry) {
-	        registry.enableSimpleBroker("/user");
+	        registry.enableSimpleBroker("/group","/user");
 	        registry.setApplicationDestinationPrefixes("/app");
 	        registry.setUserDestinationPrefix("/user");
 	    }
