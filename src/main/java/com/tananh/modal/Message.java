@@ -15,7 +15,7 @@ import jakarta.persistence.ManyToOne;
 public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	private Integer id;
     private String content;
     
     
@@ -32,7 +32,7 @@ public class Message {
 		super();
 	}
 
-	public Message(String id, String content, LocalDateTime timestamp, User user, Chat chat) {
+	public Message(Integer id, String content, LocalDateTime timestamp, User user, Chat chat) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -41,11 +41,11 @@ public class Message {
 		this.chat = chat;
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
