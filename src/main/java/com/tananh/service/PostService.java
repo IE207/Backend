@@ -28,5 +28,6 @@ public interface PostService {
 	public Post unLikePost (Integer userId, Integer postId) throws PostException, UserException;
 	
 	public List<Post> searchPosts (String query) throws PostException;
+	boolean userLikedPost(Integer userid, Integer postid) throws PostException, UserException;
 }
 	
