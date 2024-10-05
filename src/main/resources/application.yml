@@ -2,7 +2,7 @@ spring:
   application:
     name: SocialMedia
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/SocialMedia
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/SocialMediaa
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,5 +23,5 @@ spring:
 server:
   port: 5454
 springdoc:
-  api-docs:
-    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
