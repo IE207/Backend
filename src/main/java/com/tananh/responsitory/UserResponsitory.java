@@ -17,7 +17,7 @@ public interface UserResponsitory extends JpaRepository<User, Integer>{
 //	public Optional<User> findById(Integer userId);
 	public Optional<User> findByUserName(String userName);
 	
-	 public User findByEmail(String email);
+	public User findByEmail(String email);
 	    
 	@Query("SELECT u FROM User u WHERE u.userName LIKE %:query%")
 	public List<User> searchUser(@Param("query") String query);
