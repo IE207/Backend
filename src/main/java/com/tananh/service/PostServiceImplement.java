@@ -67,14 +67,23 @@ public class PostServiceImplement implements PostService{
 	}
 
 	@Override
-	public List<Post> findPostByUserId(Integer userId) throws PostException, UserException {
-		List<Post> posts= postResponsitory.findPostByUserid(userId);
-		if(posts.size()>0)
-		{	
-			return posts;
-		}
-		throw new PostException("không tìm thấy post nào cả");
+	public List<Post> findALlPost() {
+		List<Post> posts= postResponsitory.findAll();
+		return posts;
 	}
+
+	@Override
+	public List<Post> findAllPostByUserId(Integer userId) throws UserException {
+		List<Post> posts= postResponsitory.findPostByUserid(userId);
+		return posts;
+	}
+
+	@Override
+	public List<Post> findAllPostByUserIds(List<Integer> userIds) throws PostException, UserException {
+		List<Post> posts= postResponsitory.findAllPostByUserIds(userIds);
+		return posts;
+	}
+
 
 	@Override
 	public Post findPostById(Integer postId) throws PostException {
@@ -154,15 +163,7 @@ public class PostServiceImplement implements PostService{
 		return postResponsitory.save(post);
 	}
 
-	@Override
-	public List<Post> findAllPostByUserId(List<Integer> userIds) throws PostException, UserException {
-		List<Post> posts= postResponsitory.findAllPostByUserIds(userIds);
-		if(posts.size()>0)
-		{
-			return posts;
-		}
-		throw new PostException("Không tìm thấy bài viết");
-	}
+
 
 	@Override
 	public List<Post> searchPosts(String query) throws PostException {

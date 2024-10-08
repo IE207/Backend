@@ -13,9 +13,10 @@ public interface PostService {
 	
 	public String deletePost(Integer postId, Integer userId) throws PostException, UserException;
 	
-	public List<Post> findPostByUserId(Integer userId) throws PostException,UserException;
-	
-	public List<Post> findAllPostByUserId(List<Integer> userIds) throws PostException,UserException;
+	public List<Post> findALlPost();
+
+	public List<Post> findAllPostByUserId(Integer userId) throws UserException;
+	public List<Post> findAllPostByUserIds(List<Integer> userIds) throws PostException,UserException;
 	
 	public Post findPostById(Integer postId) throws PostException;
 	
