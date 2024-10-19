@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ import com.tananh.request.GroupChatRequest;
 import com.tananh.response.ApiResponse;
 import com.tananh.service.ChatService;
 import com.tananh.service.userService;
-
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
@@ -31,60 +32,82 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 public class ChatController {
 	@Autowired
     private ChatService chatService;
-	
+
 	@Autowired userService userService;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 	
-	@PostMapping("/createSingle")
-    public ResponseEntity<Chat> createChatHandler(@RequestBody ChatSingleRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
+	@PostMapping("/createSingle/{userId}")
+    public ResponseEntity<Chat> createChatHandler(
+            @PathVariable ("userId") Integer userId ,
+            @RequestHeader("Authorization") String jwt) throws UserException {
        User reqUser = userService.findUserByJWT(jwt);
-       Chat chat = chatService.createChat(reqUser, request.getUserId());
+       Chat chat = chatService.createChat(reqUser, userId);
        return new ResponseEntity<Chat>(chat,HttpStatus.OK);
-        
+
     }
 	@PostMapping("/createGroup")
     public ResponseEntity<Chat> createGroupChatHandler(@RequestBody GroupChatRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
        User reqUser = userService.findUserByJWT(jwt);
        Chat chat = chatService.createGroup(request, reqUser);
        return new ResponseEntity<Chat>(chat,HttpStatus.OK);
-        
+
     }
-	
+
 	@GetMapping("/{chatId}")
     public ResponseEntity<Chat> findChatByIdHandler(@PathVariable Integer chatId,@RequestHeader("Authorization") String jwt) throws ChatException {
-        
+
       Chat chat = chatService.FindChatById(chatId);
       return new ResponseEntity<Chat>(chat,HttpStatus.OK);
-       
+
     }
-	
+    @MessageMapping("/sendPrivateMessage")  // Được dùng để nhận tin nhắn từ WebSocket client
+    public void sendPrivateMessage(ChatSingleRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
+        // Lấy thông tin người gửi và người nhận từ request
+        User sender = userService.findUserByJWT(jwt);
+        User receiver = userService.findUserById(request.getUserId());
+
+        // Gửi tin nhắn riêng qua WebSocket
+        messagingTemplate.convertAndSendToUser(receiver.getUserName(), "/queue/messages", "Tin nhắn từ " + sender.getUserName() + ": " + request.getMessage());
+    }
+
 	@GetMapping("/user")
     public ResponseEntity<List<Chat>> findChatByIdHandler(@RequestHeader("Authorization") String jwt) throws ChatException, UserException {
 		User reqUser = userService.findUserByJWT(jwt);
 		List<Chat> chats = chatService.findAllChatByUserId(reqUser.getId());
         return new ResponseEntity<List<Chat>>(chats,HttpStatus.OK);
-       
+
     }
-	
+    @MessageMapping("/sendGroupMessage")
+    public void sendGroupMessage(GroupChatRequest request,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+        User sender = userService.findUserByJWT(jwt);
+        Chat chat = chatService.FindChatById(request.getChatId());
+
+        // Gửi tin nhắn tới tất cả các thành viên trong group
+        messagingTemplate.convertAndSend("/topic/group/" + chat.getId(), "Tin nhắn từ " + sender.getUserName() + ": " + request.getMessage());
+    }
+
 	@PostMapping("/{chatId}/add/{userId}")
     public ResponseEntity<Chat> addUserToGroupChatHandler(@PathVariable Integer chatId,@PathVariable Integer userId,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
        Chat chat = chatService.addUserToGroup(userId, chatId);
        return new ResponseEntity<Chat>(chat,HttpStatus.OK);
-        
+
     }
-	
+
 	@PutMapping("/{chatId}/add/{userId}")
     public ResponseEntity<Chat> removeUserFromGroupChatHandler(@PathVariable Integer chatId,@PathVariable Integer userId,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
 		User reqUser = userService.findUserByJWT(jwt);
 		Chat chat = chatService.removeFromGroup(chatId, userId, reqUser);
        return new ResponseEntity<Chat>(chat,HttpStatus.OK);
-        
+
     }
-	
+
 	@DeleteMapping("/delete/{chatId}")
     public ResponseEntity<ApiResponse> deleteGroupChatHandler(@PathVariable Integer chatId,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
 		User reqUser = userService.findUserByJWT(jwt);
 		chatService.deleteChat(chatId, reqUser.getId());
 		ApiResponse apiResponse= new ApiResponse("đã xóa thành công đoạn chat",jwt);
        return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
-	}     
+	}
 }

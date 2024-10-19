@@ -2,6 +2,7 @@ package com.tananh.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class PostServiceImplement implements PostService{
 
         UserDto userDto = new UserDto();
         userDto.setEmail(user.getEmail());
-        userDto.setUserId(user.getId());
+        userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setImageURL(user.getImageURL());
         userDto.setUserName(user.getUserName());
@@ -42,7 +43,7 @@ public class PostServiceImplement implements PostService{
 				throw new PostException("Thông tin cập nhật không có!");
 			}
 			Post post = findPostById(postUpdate.getId());
-			if(post.getUser().getUserId().equals(userId)) 
+			if(post.getUser().getId().equals(userId))
 			{
 				post.setCaption(postUpdate.getCaption());
 				post.setCreateAt(postUpdate.getCreateAt());
@@ -58,7 +59,7 @@ public class PostServiceImplement implements PostService{
 //		User user = userService.findUserById(userId);
 		
 		Post post = findPostById(postId);
-		if(post.getUser().getUserId().equals(userId)) {
+		if(post.getUser().getId().equals(userId)) {
 			 postResponsitory.deleteById(postId);
 			 return "Đã xóa thành công";
 		}
@@ -66,14 +67,23 @@ public class PostServiceImplement implements PostService{
 	}
 
 	@Override
-	public List<Post> findPostByUserId(Integer userId) throws PostException, UserException {
-		List<Post> posts= postResponsitory.findPostByUserid(userId);
-		if(posts.size()>0)
-		{	
-			return posts;
-		}
-		throw new PostException("không tìm thấy post nào cả");
+	public List<Post> findALlPost() {
+		List<Post> posts= postResponsitory.findAll();
+		return posts;
 	}
+
+	@Override
+	public List<Post> findAllPostByUserId(Integer userId) throws UserException {
+		List<Post> posts= postResponsitory.findPostByUserid(userId);
+		return posts;
+	}
+
+	@Override
+	public List<Post> findAllPostByUserIds(List<Integer> userIds) throws PostException, UserException {
+		List<Post> posts= postResponsitory.findAllPostByUserIds(userIds);
+		return posts;
+	}
+
 
 	@Override
 	public Post findPostById(Integer postId) throws PostException {
@@ -115,45 +125,45 @@ public class PostServiceImplement implements PostService{
 	}
 
 	@Override
-	public Post likePost(Integer userId, Integer postId) throws PostException , UserException{
+	public Post likePost(Integer userId, Integer postId) throws PostException, UserException {
 		User user = userService.findUserById(userId);
+
 		UserDto userDto = new UserDto();
-		userDto.setUserId(userId);
+		userDto.setId(userId);
 		userDto.setEmail(user.getEmail());
 		userDto.setName(user.getName());
 		userDto.setUserName(user.getUserName());
+
 		Post post = findPostById(postId);
-		post.getLikeByUser().add(userDto);
-		
+
+		if (!userLikedPost(userId, postId)) {
+			post.getLikeByUser().add(userDto);
+		} else {
+			post.getLikeByUser().removeIf(u -> u.getId().equals(userId));
+		}
+
 		postResponsitory.save(post);
 		return postResponsitory.save(post);
 	}
+
 
 	@Override
 	public Post unLikePost(Integer userId, Integer postId) throws PostException, UserException {
 		User user = userService.findUserById(userId);
 		UserDto userDto = new UserDto();
-		userDto.setUserId(userId);
+		userDto.setId(userId);
 		userDto.setEmail(user.getEmail());
 		userDto.setName(user.getName());
 		userDto.setUserName(user.getUserName());
 		Post post = findPostById(postId);
 	
-		 post.getLikeByUser().removeIf(u -> u.getUserId().equals(userId));
+		 post.getLikeByUser().removeIf(u -> u.getId().equals(userId));
 		
 		postResponsitory.save(post);
 		return postResponsitory.save(post);
 	}
 
-	@Override
-	public List<Post> findAllPostByUserId(List<Integer> userIds) throws PostException, UserException {
-		List<Post> posts= postResponsitory.findAllPostByUserIds(userIds);
-		if(posts.size()>0)
-		{
-			return posts;
-		}
-		throw new PostException("Không tìm thấy bài viết");
-	}
+
 
 	@Override
 	public List<Post> searchPosts(String query) throws PostException {
@@ -163,6 +173,18 @@ public class PostServiceImplement implements PostService{
 			return posts;
 		}
 		throw new PostException("Không tìm thấy bài viết nào");
+	}
+
+	@Override
+	public boolean userLikedPost(Integer userid, Integer postid) throws PostException, UserException {
+		Post post = postResponsitory.findById(postid).orElseThrow(() -> new PostException("Post not found"));
+		Set<UserDto> likedUsers = post.getLikeByUser();
+		boolean userLiked = likedUsers.stream().anyMatch(user -> user.getId().equals(userid));
+
+
+
+		return userLiked;
+
 	}
 
 }

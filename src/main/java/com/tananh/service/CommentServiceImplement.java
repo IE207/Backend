@@ -31,7 +31,7 @@ public class CommentServiceImplement implements CommentService{
 	    User user = userService.findUserById(userID);
 	    
 	    UserDto userDto = new UserDto();
-	    userDto.setUserId(user.getId());
+	    userDto.setId(user.getId());
 	    userDto.setEmail(user.getEmail());
 	    userDto.setName(user.getName());
 	    userDto.setUserName(user.getUserName());
@@ -56,7 +56,7 @@ public class CommentServiceImplement implements CommentService{
 	@Override
 	public String deleteComment(Integer commentId, Integer userId) throws CommentException, UserException {
 		Comments cmt = findCommentByid(commentId);
-		if(cmt.getUserDto().getUserId().equals(userId))
+		if(cmt.getUserDto().getId().equals(userId))
 		{
 			commentResponsitory.delete(cmt);
 			return "Đã xóa thành công";
@@ -67,7 +67,7 @@ public class CommentServiceImplement implements CommentService{
 	@Override
 	public Comments updateComment(String content,Integer commentId, Integer userId) throws CommentException, UserException {
 		Comments cmt = findCommentByid(commentId);
-		if(cmt.getUserDto().getUserId().equals(userId)) {
+		if(cmt.getUserDto().getId().equals(userId)) {
 			cmt.setContent(content);
 			cmt.setCreateAt(LocalDateTime.now());
 			Comments updatedcmt=commentResponsitory.save(cmt);
@@ -82,7 +82,7 @@ public class CommentServiceImplement implements CommentService{
 	public Comments likeComment(Integer commentId, Integer userId) throws CommentException, UserException {
 		User user = userService.findUserById(userId);
 		UserDto userDto = new UserDto();
-		userDto.setUserId(userId);
+		userDto.setId(userId);
 		userDto.setEmail(user.getEmail());
 		userDto.setName(user.getName());
 		userDto.setUserName(user.getUserName());
@@ -97,13 +97,13 @@ public class CommentServiceImplement implements CommentService{
 	public Comments unlikeComment(Integer commentId, Integer userId) throws CommentException, UserException {
 		User user = userService.findUserById(userId);
 		UserDto userDto = new UserDto();
-		userDto.setUserId(userId);
+		userDto.setId(userId);
 		userDto.setEmail(user.getEmail());
 		userDto.setName(user.getName());
 		userDto.setUserName(user.getUserName());
 		
 		Comments cmt = findCommentByid(commentId);
-		cmt.getLikeByUser().removeIf(u -> u.getUserId().equals(userId));
+		cmt.getLikeByUser().removeIf(u -> u.getId().equals(userId));
 		
 		return commentResponsitory.save(cmt);
 	}

@@ -2,6 +2,7 @@ package com.tananh.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,8 @@ public class PostController {
 	@Autowired PostService postService;
 	
 	@Autowired userService userService;
-	
+
+
 	@PostMapping("/create")
 	ResponseEntity<Post> CreatePostHandle(@RequestBody Post post, @RequestHeader("Authorization") String jwt) throws PostException, UserException{
 		User user = userService.findUserByJWT(jwt);
@@ -51,11 +53,17 @@ public class PostController {
 			return new ResponseEntity<Post>(postUpdated,HttpStatus.OK);
 		}
 	
-	@GetMapping("/all/{id}")
-	public ResponseEntity<List<Post>> findAllPostHandler(@PathVariable("id") Integer userId) throws PostException,UserException{
+	@GetMapping("/all")
+	public ResponseEntity<List<Post>> findAllPostHandler() throws PostException,UserException{
 		
-		List<Post> posts = postService.findPostByUserId(userId);
+		List<Post> posts = postService.findALlPost();
 		
+		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
+	}
+	@GetMapping("/all/mypost")
+	public ResponseEntity<List<Post>> findPostByUserIdHandler(@RequestHeader("Authorization") String jwt) throws PostException,UserException{
+		User user = userService.findUserByJWT(jwt);
+		List<Post> posts = postService.findAllPostByUserId(user.getId());
 		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
 	}
 	
@@ -76,7 +84,7 @@ public class PostController {
 	
 	@GetMapping("/following/{ids}")
 	public ResponseEntity<List<Post>> findAllPostByUserIdHandler(@PathVariable("ids") List<Integer> userId) throws PostException,UserException{
-		List<Post> posts = postService.findAllPostByUserId(userId);
+		List<Post> posts = postService.findAllPostByUserIds(userId);
 		return new ResponseEntity<List<Post>>(posts,HttpStatus.OK);
 	}
 	

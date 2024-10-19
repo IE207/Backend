@@ -57,7 +57,7 @@ public class UserServiceImplement implements userService {
 
 		        UserDto followerDto = new UserDto();
 		        followerDto.setEmail(reqUser.getEmail());
-		        followerDto.setUserId(reqUser.getId());
+		        followerDto.setId(reqUser.getId());
 		        followerDto.setName(reqUser.getName());
 		        followerDto.setImageURL(reqUser.getImageURL());
 		        followerDto.setUserName(reqUser.getUserName());
@@ -65,7 +65,7 @@ public class UserServiceImplement implements userService {
 		        
 		       UserDto followingDto= new UserDto();
 		       followingDto.setEmail(followerUser.getEmail());
-		       followingDto.setUserId(followerUser.getId());
+		       followingDto.setId(followerUser.getId());
 		       followingDto.setName(followerUser.getName());
 		       followingDto.setImageURL(followerUser.getImageURL());
 		       followingDto.setUserName(followerUser.getUserName());
@@ -94,7 +94,7 @@ public class UserServiceImplement implements userService {
 
 		        UserDto followerDto = new UserDto();
 		        followerDto.setEmail(reqUser.getEmail());
-		        followerDto.setUserId(reqUser.getId());
+		        followerDto.setId(reqUser.getId());
 		        followerDto.setName(reqUser.getName());
 		        followerDto.setImageURL(reqUser.getImageURL());
 		        followerDto.setUserName(reqUser.getUserName());
@@ -102,7 +102,7 @@ public class UserServiceImplement implements userService {
 		        
 		       UserDto followingDto= new UserDto();
 		       followingDto.setEmail(followerUser.getEmail());
-		       followingDto.setUserId(followerUser.getId());
+		       followingDto.setId(followerUser.getId());
 		       followingDto.setName(followerUser.getName());
 		       followingDto.setImageURL(followerUser.getImageURL());
 		       followingDto.setUserName(followerUser.getUserName());
