@@ -21,7 +21,7 @@ public class JwtProvider {
 	public String genarateToken(Authentication authenticaiton) {
 		String token = Jwts.builder()
 						.setIssuedAt(new Date())
-						.setExpiration(new Date(new Date().getTime()+86400000))
+						.setExpiration(new Date(new Date().getTime()+864000000))
 						.claim("email",authenticaiton.getName())
 						.signWith(secretKey)
 						.compact();
