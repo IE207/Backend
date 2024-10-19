@@ -30,6 +30,7 @@ public class UserController {
 		User user= userService.findUserById(id);
 		return new ResponseEntity<User>(user,HttpStatus.OK);
 	}
+
 	
 	@GetMapping("/username/{username}")
 	public ResponseEntity<User> findUserByUsernameHandler(@PathVariable String username) throws UserException{

@@ -34,10 +34,12 @@ public class ChatController {
 	
 	@Autowired userService userService;
 	
-	@PostMapping("/createSingle")
-    public ResponseEntity<Chat> createChatHandler(@RequestBody ChatSingleRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
+	@PostMapping("/createSingle/{userId}")
+    public ResponseEntity<Chat> createChatHandler(
+            @PathVariable ("userId") Integer userId ,
+            @RequestHeader("Authorization") String jwt) throws UserException {
        User reqUser = userService.findUserByJWT(jwt);
-       Chat chat = chatService.createChat(reqUser, request.getUserId());
+       Chat chat = chatService.createChat(reqUser, userId);
        return new ResponseEntity<Chat>(chat,HttpStatus.OK);
         
     }
