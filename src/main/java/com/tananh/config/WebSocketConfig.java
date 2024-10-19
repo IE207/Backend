@@ -23,6 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 		 registry.addEndpoint("/ws")
 				 .setAllowedOriginPatterns("*");
+
 	}
 
 
@@ -40,7 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	    public void configureMessageBroker(MessageBrokerRegistry registry) {
-	        registry.enableSimpleBroker("/group","/user");
+		registry.enableSimpleBroker("/topic", "/queue");
 	        registry.setApplicationDestinationPrefixes("/app");
 	        registry.setUserDestinationPrefix("/user");
 	    }

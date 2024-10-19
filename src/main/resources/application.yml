@@ -2,10 +2,9 @@ spring:
   application:
     name: SocialMedia
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/SocialMedia
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/SocialMediaa
     username: root
-    password: vunam2003333
-#    password: 1234
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
