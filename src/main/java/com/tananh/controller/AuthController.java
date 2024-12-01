@@ -42,6 +42,7 @@ public class AuthController {
 		String password=user.getPassword();
 		String username=user.getUserName();
 		String name=user.getName();
+		String img=user.getImageURL();
 		if(userResponsitory.findByEmail(email)!=null) {
 			throw new UserException("Email đã được sử dụng");
 		}
@@ -50,6 +51,7 @@ public class AuthController {
 		createUser.setPassword(passwordEncoder.encode(password));
 		createUser.setUserName(username);
 		createUser.setName(name);
+		createUser.setImageURL(img);
 		User UserSaved=userResponsitory.save(createUser);
 		
 		Authentication authentication = new UsernamePasswordAuthenticationToken(UserSaved.getEmail(),UserSaved.getPassword());

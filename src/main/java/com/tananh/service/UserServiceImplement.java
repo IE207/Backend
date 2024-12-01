@@ -49,73 +49,49 @@ public class UserServiceImplement implements userService {
 	@Override
 	public String Follower(Integer reqUserId, Integer followerUserId) throws UserException {
 		Optional<User> reqUserOptional = userResponsitory.findById(reqUserId);
-		Optional<User>  followerUserOptional = userResponsitory.findById(followerUserId);
-		
-		 if (reqUserOptional.isPresent() && followerUserOptional.isPresent()) {
-		        User reqUser = reqUserOptional.get(); // Trích xuất đối tượng User từ Optional
-		        User followerUser = followerUserOptional.get(); // Trích xuất đối tượng User từ Optional
+		Optional<User> followerUserOptional = userResponsitory.findById(followerUserId);
 
-		        UserDto followerDto = new UserDto();
-		        followerDto.setEmail(reqUser.getEmail());
-		        followerDto.setId(reqUser.getId());
-		        followerDto.setName(reqUser.getName());
-		        followerDto.setImageURL(reqUser.getImageURL());
-		        followerDto.setUserName(reqUser.getUserName());
-		        
-		        
-		       UserDto followingDto= new UserDto();
-		       followingDto.setEmail(followerUser.getEmail());
-		       followingDto.setId(followerUser.getId());
-		       followingDto.setName(followerUser.getName());
-		       followingDto.setImageURL(followerUser.getImageURL());
-		       followingDto.setUserName(followerUser.getUserName());
-		       
-		       reqUser.getFollowing().add(followingDto);
-		       followerUser.getFollower().add(followerDto);
-		       
-		       userResponsitory.save(reqUser);
-		       userResponsitory.save(followerUser);
-		       return "bạn đã following"+followerUser.getUserName();
-		    } else {
-		        throw new UserException("Không tìm thấy người dùng");
-		    }
-		
-		
+		if (reqUserOptional.isPresent() && followerUserOptional.isPresent()) {
+			User reqUser = reqUserOptional.get();
+			User followerUser = followerUserOptional.get();
+
+			// Add to following
+			reqUser.getFollowing().add(followerUser);
+			// Add to follower
+			followerUser.getFollower().add(reqUser);
+
+			// Save both users
+			userResponsitory.save(reqUser);
+			userResponsitory.save(followerUser);
+
+			return "Bạn đã theo dõi " + followerUser.getUserName();
+		} else {
+			throw new UserException("Không tìm thấy người dùng");
+		}
 	}
 
 	@Override
 	public String unFollow(Integer reqUserId, Integer followerUserId) throws UserException {
 		Optional<User> reqUserOptional = userResponsitory.findById(reqUserId);
-		Optional<User>  followerUserOptional = userResponsitory.findById(followerUserId);
-		
-		 if (reqUserOptional.isPresent() && followerUserOptional.isPresent()) {
-		        User reqUser = reqUserOptional.get(); // Trích xuất đối tượng User từ Optional
-		        User followerUser = followerUserOptional.get(); // Trích xuất đối tượng User từ Optional
+		Optional<User> followerUserOptional = userResponsitory.findById(followerUserId);
 
-		        UserDto followerDto = new UserDto();
-		        followerDto.setEmail(reqUser.getEmail());
-		        followerDto.setId(reqUser.getId());
-		        followerDto.setName(reqUser.getName());
-		        followerDto.setImageURL(reqUser.getImageURL());
-		        followerDto.setUserName(reqUser.getUserName());
-		        
-		        
-		       UserDto followingDto= new UserDto();
-		       followingDto.setEmail(followerUser.getEmail());
-		       followingDto.setId(followerUser.getId());
-		       followingDto.setName(followerUser.getName());
-		       followingDto.setImageURL(followerUser.getImageURL());
-		       followingDto.setUserName(followerUser.getUserName());
-		       
-		       reqUser.getFollowing().remove(followingDto);
-		       followerUser.getFollower().remove(followerDto);
-		       
-		       userResponsitory.save(reqUser);
-		       userResponsitory.save(followerUser);
-		       return "bạn đã unfollow: "+followerUser.getUserName();
-		    } else {
-		        throw new UserException("Không tìm thấy người dùng");
-		    }
+		if (reqUserOptional.isPresent() && followerUserOptional.isPresent()) {
+			User reqUser = reqUserOptional.get();
+			User followerUser = followerUserOptional.get();
+
+			// Remove from following
+			reqUser.getFollowing().remove(followerUser);
+			// Remove from follower
+			followerUser.getFollower().remove(reqUser);
+
+			// Save both users
+			userResponsitory.save(reqUser);
+			userResponsitory.save(followerUser);
+
+			return "Bạn đã hủy theo dõi " + followerUser.getUserName();
+		} else {
+			throw new UserException("Không tìm thấy người dùng");
+		}
 	}
 
 	@Override

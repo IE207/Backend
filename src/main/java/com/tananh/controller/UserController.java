@@ -2,6 +2,7 @@ package com.tananh.controller;
 
 import java.util.List;
 
+import com.tananh.dto.UserStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -39,13 +40,21 @@ public class UserController {
 	}
 	
 	@PutMapping("/follow/{followUserId}")
-	public ResponseEntity<User> followUserHandler(@PathVariable Integer followUserId) throws UserException{
-		return null;
+	public ResponseEntity<String> followUserHandler(@PathVariable Integer followUserId, @RequestHeader("Authorization") String jwt) throws UserException{
+		User currentUser = userService.findUserByJWT(jwt);
+		String response = userService.Follower(currentUser.getId(), followUserId);
+
+		return new ResponseEntity<String>(response, HttpStatus.OK);
 	}
 	
-	@PutMapping("/follow/{userId}")
-	public ResponseEntity<User> unfollowUserHandler(@PathVariable Integer followUserId) throws UserException{
-		return null;
+	@PutMapping("/unfollow/{followUserId}")
+	public ResponseEntity<String> unfollowUserHandler(@PathVariable Integer followUserId, @RequestHeader("Authorization") String jwt) throws UserException{
+		User currentUser = userService.findUserByJWT(jwt);
+
+		// Thực hiện hành động bỏ theo dõi
+		String response = userService.unFollow(currentUser.getId(), followUserId);
+
+		return new ResponseEntity<String>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/profile")
@@ -69,4 +78,19 @@ public class UserController {
 		User user = userService.updateUserDetails(updatedUser, userFromJwt.getId());
 		return ResponseEntity.ok().body(user); 
     }
+	@GetMapping("/stats")
+	public ResponseEntity<UserStatsDto> getUserStats(@RequestHeader("Authorization") String jwt) throws UserException {
+		// Lấy người dùng từ DB thông qua JWT
+		User userFromJwt = userService.findUserByJWT(jwt);
+
+		if (userFromJwt == null) {
+			throw new UserException("User not found!");
+		}
+
+		UserStatsDto userStats = new UserStatsDto();
+		userStats.setFollowersCount(userFromJwt.getFollower().size());
+		userStats.setFollowingCount(userFromJwt.getFollowing().size());
+
+		return ResponseEntity.ok(userStats);
+	}
 }
