@@ -8,6 +8,8 @@ import com.tananh.modal.User;
 
 public interface userService {
 	public User findUserById(Integer id)throws UserException;
+	public List<User> findAll();
+
 	public User findUserByUsername(String name)throws UserException;
 	public User findByEmail(String email);
 	public User findUserByJWT(String jwt)throws UserException ;
