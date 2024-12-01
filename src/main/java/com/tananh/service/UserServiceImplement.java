@@ -3,7 +3,10 @@ package com.tananh.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.tananh.modal.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.tananh.config.JwtProvider;
@@ -25,6 +28,11 @@ public class UserServiceImplement implements userService {
 			return user.get();
 		} throw new UserException("Không tìm  thấy người dùng với id:"+id);
 	
+	}
+
+	@Override
+	public List<User> findAll() {
+        return userResponsitory.findAll();
 	}
 
 	@Override
