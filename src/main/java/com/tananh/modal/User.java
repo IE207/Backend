@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tananh.dto.UserDto;
 
 import jakarta.persistence.*;
@@ -23,14 +24,20 @@ public class User {
     private String userbio;
     private String password;
     private String gender;
-    
-    @Embedded
-	@ElementCollection
-    private Set<UserDto> follower = new HashSet<UserDto>();
-    
-    @Embedded
-	@ElementCollection
-    private Set<UserDto> following = new HashSet<UserDto>();
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinTable(
+			name = "user_following",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "following_id")
+	)
+	private Set<User> following = new HashSet<>();
+
+	@ManyToMany(mappedBy = "following", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Set<User> follower = new HashSet<>();
+
     
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Story> stories= new ArrayList<>();
@@ -46,7 +53,7 @@ public class User {
 
 
 	public User(Integer id, String userName, String name, String email, String imageURL, String moblie, String userbio,
-			String password, String gender, Set<UserDto> follower, Set<UserDto> following, List<Story> stories,
+			String password, String gender, Set<User> follower, Set<User> following, List<Story> stories,
 			List<Post> savedPost) {
 		super();
 		this.id = id;
@@ -155,22 +162,22 @@ public class User {
 	}
 
 
-	public Set<UserDto> getFollower() {
+	public Set<User> getFollower() {
 		return follower;
 	}
 
 
-	public void setFollower(Set<UserDto> follower) {
+	public void setFollower(Set<User> follower) {
 		this.follower = follower;
 	}
 
 
-	public Set<UserDto> getFollowing() {
+	public Set<User> getFollowing() {
 		return following;
 	}
 
 
-	public void setFollowing(Set<UserDto> following) {
+	public void setFollowing(Set<User> following) {
 		this.following = following;
 	}
 
@@ -194,31 +201,6 @@ public class User {
 		this.savedPost = savedPost;
 	}
 
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(email, follower, following, gender, id, imageURL, moblie, name, password, savedPost,
-				stories, userName, userbio);
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		return Objects.equals(email, other.email) && Objects.equals(follower, other.follower)
-				&& Objects.equals(following, other.following) && Objects.equals(gender, other.gender)
-				&& Objects.equals(id, other.id) && Objects.equals(imageURL, other.imageURL)
-				&& Objects.equals(moblie, other.moblie) && Objects.equals(name, other.name)
-				&& Objects.equals(password, other.password) && Objects.equals(savedPost, other.savedPost)
-				&& Objects.equals(stories, other.stories) && Objects.equals(userName, other.userName)
-				&& Objects.equals(userbio, other.userbio);
-	}
 	
 	
     
