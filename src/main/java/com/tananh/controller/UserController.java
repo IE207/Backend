@@ -46,22 +46,14 @@ public class UserController {
 	
 	@PutMapping("/follow/{followUserId}")
 	public ResponseEntity<String> followUserHandler(@PathVariable Integer followUserId, @RequestHeader("Authorization") String jwt) throws UserException{
-		User currentUser = userService.findUserByJWT(jwt);
-		String response = userService.Follower(currentUser.getId(), followUserId);
-
+		String response = userService.Follower(jwt, followUserId);
 		return new ResponseEntity<String>(response, HttpStatus.OK);
 	}
-	
-	@PutMapping("/unfollow/{followUserId}")
-	public ResponseEntity<String> unfollowUserHandler(@PathVariable Integer followUserId, @RequestHeader("Authorization") String jwt) throws UserException{
-		User currentUser = userService.findUserByJWT(jwt);
-
-		// Thực hiện hành động bỏ theo dõi
-		String response = userService.unFollow(currentUser.getId(), followUserId);
-
-		return new ResponseEntity<String>(response, HttpStatus.OK);
+	@GetMapping("/follow/{followUserId}")
+	public ResponseEntity<Boolean> CheckFollowUserHandler(@PathVariable Integer followUserId, @RequestHeader("Authorization") String jwt) throws UserException{
+		Boolean response = userService.isFollowing(jwt, followUserId);
+		return new ResponseEntity<Boolean>(response, HttpStatus.OK);
 	}
-	
 	@GetMapping("/profile")
 	public ResponseEntity<User> findUserProfileHandle(@RequestHeader("Authorization") String jwt) throws UserException{
 		User user = userService.findUserByJWT(jwt);
