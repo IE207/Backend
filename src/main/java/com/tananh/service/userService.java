@@ -14,8 +14,8 @@ public interface userService {
 	public User findByEmail(String email);
 	public User findUserByJWT(String jwt)throws UserException ;
 	public List<User> findUserByIds( List<Integer> UserIds ) throws UserException;
-	public String Follower(Integer reqUserId, Integer followerUserId)throws UserException;
-	public String unFollow(Integer reqUserId, Integer followerUserId)throws UserException;
+	public String Follower(String jwt,Integer followerUserId) throws UserException;
+	public boolean isFollowing(String jwt,Integer followerUserId) throws UserException;
 	public List<User> searchUser(String query)throws UserException;
 	public User updateUserDetails(User updatedUser, Integer userId) throws UserException;
 }
