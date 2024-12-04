@@ -17,4 +17,5 @@ public interface ChatService {
 	public Chat renameGroup (Integer chatid, String groupName, User requserId) throws ChatException;
 	public Chat removeFromGroup (Integer chatId, Integer userld, User requser) throws UserException, ChatException;
 	public void deleteChat (Integer chatid, Integer userid) throws ChatException, UserException;
+	public Integer FindChatId(User userReq, User user) throws ChatException;
 }
