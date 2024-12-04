@@ -47,13 +47,32 @@ public class ChatController {
        return new ResponseEntity<Chat>(chat,HttpStatus.OK);
 
     }
-	@PostMapping("/createGroup")
-    public ResponseEntity<Chat> createGroupChatHandler(@RequestBody GroupChatRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
-       User reqUser = userService.findUserByJWT(jwt);
-       Chat chat = chatService.createGroup(request, reqUser);
-       return new ResponseEntity<Chat>(chat,HttpStatus.OK);
+    @GetMapping("/getChatId/{userId2}")
+    public ResponseEntity<Integer> getChatIdByUsers(@PathVariable Integer userId2,
+                                                    @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+        User reqUser = userService.findUserByJWT(jwt); // Lấy người dùng hiện tại từ JWT
 
+        // Kiểm tra xem userId1 và userId2 có thuộc về người dùng hiện tại không
+        if ( reqUser.getId() == userId2) {
+            throw new UserException("User is not authorized to view this chat");
+        }
+        User user = userService.findUserById(userId2);
+
+        // Tìm cuộc trò chuyện giữa userId1 và userId2
+        Integer chatId = chatService.FindChatId(reqUser, user);
+        if (chatId == null) {
+            throw new ChatException("No chat found between the users");
+        }
+
+        return new ResponseEntity<>(chatId, HttpStatus.OK);
     }
+//	@PostMapping("/createGroup")
+//    public ResponseEntity<Chat> createGroupChatHandler(@RequestBody GroupChatRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
+//       User reqUser = userService.findUserByJWT(jwt);
+//       Chat chat = chatService.createGroup(request, reqUser);
+//       return new ResponseEntity<Chat>(chat,HttpStatus.OK);
+//
+//    }
 
 	@GetMapping("/{chatId}")
     public ResponseEntity<Chat> findChatByIdHandler(@PathVariable Integer chatId,@RequestHeader("Authorization") String jwt) throws ChatException {
@@ -62,15 +81,15 @@ public class ChatController {
       return new ResponseEntity<Chat>(chat,HttpStatus.OK);
 
     }
-    @MessageMapping("/sendPrivateMessage")  // Được dùng để nhận tin nhắn từ WebSocket client
-    public void sendPrivateMessage(ChatSingleRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
-        // Lấy thông tin người gửi và người nhận từ request
-        User sender = userService.findUserByJWT(jwt);
-        User receiver = userService.findUserById(request.getUserId());
-
-        // Gửi tin nhắn riêng qua WebSocket
-        messagingTemplate.convertAndSendToUser(receiver.getUserName(), "/queue/messages", "Tin nhắn từ " + sender.getUserName() + ": " + request.getMessage());
-    }
+//    @MessageMapping("/sendPrivateMessage")  // Được dùng để nhận tin nhắn từ WebSocket client
+//    public void sendPrivateMessage(ChatSingleRequest request,@RequestHeader("Authorization") String jwt) throws UserException {
+//        // Lấy thông tin người gửi và người nhận từ request
+//        User sender = userService.findUserByJWT(jwt);
+//        User receiver = userService.findUserById(request.getUserId());
+//
+//        // Gửi tin nhắn riêng qua WebSocket
+//        messagingTemplate.convertAndSendToUser(receiver.getUserName(), "/queue/messages", "Tin nhắn từ " + sender.getUserName() + ": " + request.getMessage());
+//    }
 
 	@GetMapping("/user")
     public ResponseEntity<List<Chat>> findChatByIdHandler(@RequestHeader("Authorization") String jwt) throws ChatException, UserException {
@@ -79,14 +98,14 @@ public class ChatController {
         return new ResponseEntity<List<Chat>>(chats,HttpStatus.OK);
 
     }
-    @MessageMapping("/sendGroupMessage")
-    public void sendGroupMessage(GroupChatRequest request,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
-        User sender = userService.findUserByJWT(jwt);
-        Chat chat = chatService.FindChatById(request.getChatId());
-
-        // Gửi tin nhắn tới tất cả các thành viên trong group
-        messagingTemplate.convertAndSend("/topic/group/" + chat.getId(), "Tin nhắn từ " + sender.getUserName() + ": " + request.getMessage());
-    }
+//    @MessageMapping("/sendGroupMessage")
+//    public void sendGroupMessage(GroupChatRequest request,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+//        User sender = userService.findUserByJWT(jwt);
+//        Chat chat = chatService.FindChatById(request.getChatId());
+//
+//        // Gửi tin nhắn tới tất cả các thành viên trong group
+//        messagingTemplate.convertAndSend("/topic/group/" + chat.getId(), "Tin nhắn từ " + sender.getUserName() + ": " + request.getMessage());
+//    }
 
 	@PostMapping("/{chatId}/add/{userId}")
     public ResponseEntity<Chat> addUserToGroupChatHandler(@PathVariable Integer chatId,@PathVariable Integer userId,@RequestHeader("Authorization") String jwt) throws UserException, ChatException {

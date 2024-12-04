@@ -158,4 +158,13 @@ public class ChatServiceImplement implements ChatService{
         }
 	}
 
+	@Override
+	public Integer FindChatId(User userReq, User user) throws ChatException {
+		Chat chat = chatResponsitory.findSingleChatByUserIds(userReq, user);
+		if(chat!=null) {
+			return chat.getId();
+		}
+		return 0;
+	}
+
 }
